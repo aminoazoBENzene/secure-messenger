@@ -1,35 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
+<meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Secure Messenger v3</title>
+<title>Secure Messenger</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
 :root{
-  --bg:#0b0f1a;
-  --card:#121a2a;
-  --card2:#0f1626;
-  --text:#e9eefc;
-  --muted:#8ea0c7;
-  --accent:#6c8cff;
-  --accent2:#7cf0c5;
+  --bg:#0a0d14;
+  --panel:#111827;
+  --panel2:#0f1624;
+  --text:#e8ecf7;
+  --muted:#93a4c7;
   --border:rgba(255,255,255,0.08);
-  --shadow: 0 20px 60px rgba(0,0,0,0.4);
+  --accent:#6c8cff;
+  --accent2:#2ee6a6;
+  --shadow:0 20px 60px rgba(0,0,0,0.45);
   --r:16px;
-  --font:'Inter', sans-serif;
+  --font:'Inter',sans-serif;
 }
 
 .light{
-  --bg:#f4f7ff;
-  --card:#ffffff;
-  --card2:#f1f4ff;
+  --bg:#f5f7ff;
+  --panel:#ffffff;
+  --panel2:#f0f3ff;
   --text:#0f172a;
-  --muted:#5b6475;
+  --muted:#5a6478;
   --border:rgba(0,0,0,0.08);
-  --shadow: 0 20px 60px rgba(0,0,0,0.08);
+  --shadow:0 20px 60px rgba(0,0,0,0.08);
 }
 
 *{box-sizing:border-box;margin:0;padding:0}
@@ -41,198 +41,236 @@ body{
   transition:.3s;
 }
 
+/* APP SHELL */
+.app{
+  max-width:920px;
+  margin:0 auto;
+  padding:24px;
+}
+
 /* TOP BAR */
 .top{
   display:flex;
   justify-content:space-between;
-  padding:18px;
   align-items:center;
+  margin-bottom:22px;
 }
 
-.logo{
+.title{
   font-weight:700;
   letter-spacing:-0.3px;
 }
 
-.switches{
+.actions{
   display:flex;
   gap:10px;
 }
 
 .btn{
-  border:none;
+  border:1px solid var(--border);
+  background:var(--panel);
+  color:var(--text);
   padding:10px 14px;
   border-radius:999px;
-  cursor:pointer;
-  font-weight:600;
   font-size:13px;
-  background:var(--card);
-  color:var(--text);
-  border:1px solid var(--border);
+  cursor:pointer;
   transition:.2s;
 }
 
-.btn:hover{transform:translateY(-1px)}
+.btn:hover{
+  transform:translateY(-1px);
+}
 
 .btn.primary{
   background:linear-gradient(135deg,var(--accent),#8aa2ff);
-  color:white;
   border:none;
+  color:white;
 }
 
-/* LAYOUT */
-.container{
-  max-width:920px;
-  margin:auto;
-  padding:10px;
+/* MODE SWITCH */
+.switch{
+  display:flex;
+  gap:10px;
+  margin-bottom:18px;
 }
 
+.switch button{
+  flex:1;
+}
+
+/* GRID CARDS */
+.grid{
+  display:grid;
+  gap:14px;
+}
+
+/* CARD */
 .card{
-  background:var(--card);
+  background:var(--panel);
   border:1px solid var(--border);
   border-radius:var(--r);
   padding:16px;
-  margin-bottom:14px;
   box-shadow:var(--shadow);
 }
 
 label{
+  display:block;
   font-size:11px;
-  color:var(--muted);
   letter-spacing:1px;
   text-transform:uppercase;
+  color:var(--muted);
+  margin-bottom:8px;
 }
 
 textarea,input{
   width:100%;
-  margin-top:8px;
   padding:12px;
   border-radius:12px;
   border:1px solid var(--border);
-  background:var(--card2);
+  background:var(--panel2);
   color:var(--text);
   font-family:var(--font);
+  outline:none;
 }
 
-textarea{min-height:110px;resize:vertical}
+textarea{
+  min-height:110px;
+  resize:vertical;
+}
 
-/* LINK BOX */
-.link{
+/* LINK CARD (IMPORTANT FIX) */
+.linkbox{
+  background:var(--panel2);
+  border:1px solid var(--border);
+  padding:14px;
+  border-radius:14px;
   font-size:12px;
   word-break:break-all;
-  background:var(--card2);
-  padding:12px;
-  border-radius:12px;
-  border:1px solid var(--border);
+  line-height:1.4;
 }
 
-/* ROW */
+/* BUTTON ROW */
 .row{
   display:flex;
   gap:10px;
   margin-top:10px;
 }
 
-.small{
+.row button{
   flex:1;
+}
+
+/* RECEIVE */
+.hidden{display:none}
+
+.output{
+  font-family:monospace;
+  white-space:pre-wrap;
 }
 
 /* STATUS */
 .status{
   font-size:12px;
   color:var(--muted);
-  margin-top:6px;
-}
-
-/* RECEIVE */
-.hidden{display:none}
-
-/* OUTPUT */
-.output{
-  white-space:pre-wrap;
-  font-family:monospace;
 }
 </style>
 </head>
 
 <body>
 
-<div class="top">
-  <div class="logo">🔐 Secure Messenger v3</div>
+<div class="app">
 
-  <div class="switches">
-    <button class="btn" id="modeBtn" onclick="toggleMode()">Send</button>
-    <button class="btn" onclick="toggleTheme()">Theme</button>
-  </div>
-</div>
-
-<div class="container">
-
-<!-- SEND -->
-<div id="send">
-
-  <div class="card">
-    <label>Message</label>
-    <textarea id="msg"></textarea>
+  <div class="top">
+    <div class="title">🔐 Secure Messenger</div>
+    <div class="actions">
+      <button class="btn" onclick="toggleTheme()">Theme</button>
+    </div>
   </div>
 
-  <div class="card">
-    <label>Password (optional)</label>
-    <input id="pass" type="password" placeholder="Optional protection layer"/>
+  <div class="switch">
+    <button class="btn primary" id="sendBtn" onclick="setMode('send')">Send</button>
+    <button class="btn" id="recvBtn" onclick="setMode('receive')">Receive</button>
   </div>
 
-  <button class="btn primary" onclick="generate()">Generate Secure Link</button>
+  <!-- SEND -->
+  <div id="send">
 
-  <div class="card hidden" id="outCard">
-    <label>Share Link</label>
-    <div class="link" id="link"></div>
+    <div class="grid">
 
-    <div class="row">
-      <button class="btn small" onclick="copy()">Copy</button>
-      <button class="btn small" onclick="share()">Share</button>
+      <div class="card">
+        <label>Message</label>
+        <textarea id="msg"></textarea>
+      </div>
+
+      <div class="card">
+        <label>Password (optional)</label>
+        <input id="pass" type="password" placeholder="Adds encryption layer"/>
+      </div>
+
+      <div class="card">
+        <button class="btn primary" onclick="generate()">Generate Secure Link</button>
+      </div>
+
+      <div class="card hidden" id="linkCard">
+        <label>Share Link</label>
+        <div class="linkbox" id="link"></div>
+
+        <div class="row">
+          <button class="btn" onclick="copy()">Copy</button>
+          <button class="btn" onclick="share()">Share</button>
+        </div>
+
+        <div class="status">Encrypted using AES-256-GCM + PBKDF2 (when password used)</div>
+      </div>
+
     </div>
 
-    <div class="status">Only people with this link can decrypt the message.</div>
   </div>
 
-</div>
+  <!-- RECEIVE -->
+  <div id="receive" class="hidden">
 
-<!-- RECEIVE -->
-<div id="receive" class="hidden">
+    <div class="grid">
 
-  <div class="card">
-    <label>Status</label>
-    <div class="status" id="status">Waiting for secure link...</div>
+      <div class="card">
+        <label>Status</label>
+        <div class="status" id="status">Waiting for secure link...</div>
+      </div>
+
+      <div class="card">
+        <label>Password</label>
+        <input id="rpass" type="password"/>
+      </div>
+
+      <div class="card">
+        <button class="btn primary" onclick="decrypt()">Decrypt</button>
+      </div>
+
+      <div class="card">
+        <label>Message</label>
+        <div class="output" id="out"></div>
+      </div>
+
+    </div>
+
   </div>
-
-  <div class="card">
-    <label>Password</label>
-    <input id="rpass" type="password"/>
-  </div>
-
-  <button class="btn primary" onclick="decrypt()">Decrypt Message</button>
-
-  <div class="card">
-    <label>Output</label>
-    <div class="output" id="out"></div>
-  </div>
-
-</div>
 
 </div>
 
 <script>
 
-/* MODE */
 let mode="send";
 let payload=null;
 
-/* TOGGLE */
-function toggleMode(){
-  mode = mode==="send"?"receive":"send";
-  document.getElementById("send").classList.toggle("hidden",mode!=="send");
-  document.getElementById("receive").classList.toggle("hidden",mode!=="receive");
-  document.getElementById("modeBtn").textContent = mode==="send"?"Send":"Receive";
+/* MODE */
+function setMode(m){
+  mode=m;
+
+  document.getElementById("send").classList.toggle("hidden",m!=="send");
+  document.getElementById("receive").classList.toggle("hidden",m!=="receive");
+
+  document.getElementById("sendBtn").classList.toggle("primary",m==="send");
+  document.getElementById("recvBtn").classList.toggle("primary",m==="receive");
 }
 
 /* THEME */
@@ -240,13 +278,12 @@ function toggleTheme(){
   document.body.classList.toggle("light");
 }
 
-/* HELPERS */
-const enc = new TextEncoder();
-const dec = new TextDecoder();
+/* CRYPTO */
+const enc=new TextEncoder();
+const dec=new TextDecoder();
 
-/* KEY DERIVATION */
-async function deriveKey(password,salt){
-  const base = await crypto.subtle.importKey(
+async function derive(password,salt){
+  const keyMat=await crypto.subtle.importKey(
     "raw",
     enc.encode(password),
     "PBKDF2",
@@ -255,13 +292,8 @@ async function deriveKey(password,salt){
   );
 
   return crypto.subtle.deriveKey(
-    {
-      name:"PBKDF2",
-      salt,
-      iterations:120000,
-      hash:"SHA-256"
-    },
-    base,
+    {name:"PBKDF2",salt,iterations:120000,hash:"SHA-256"},
+    keyMat,
     {name:"AES-GCM",length:256},
     false,
     ["encrypt","decrypt"]
@@ -269,51 +301,47 @@ async function deriveKey(password,salt){
 }
 
 /* ENCRYPT */
-async function encryptMessage(msg,password){
+async function encrypt(msg,pass){
 
-  const iv = crypto.getRandomValues(new Uint8Array(12));
-  const salt = crypto.getRandomValues(new Uint8Array(16));
+  const iv=crypto.getRandomValues(new Uint8Array(12));
+  const salt=crypto.getRandomValues(new Uint8Array(16));
 
-  const key = password
-    ? await deriveKey(password,salt)
+  const key=pass
+    ? await derive(pass,salt)
     : await crypto.subtle.generateKey(
         {name:"AES-GCM",length:256},
         true,
         ["encrypt","decrypt"]
       );
 
-  const cipher = await crypto.subtle.encrypt(
+  const cipher=await crypto.subtle.encrypt(
     {name:"AES-GCM",iv},
     key,
     enc.encode(msg)
   );
 
-  const rawKey = password
-    ? null
-    : await crypto.subtle.exportKey("raw",key);
+  const raw=pass?null:await crypto.subtle.exportKey("raw",key);
 
   return {
-    v:3,
+    v:4,
     iv:[...iv],
     salt:[...salt],
-    key: rawKey ? [...new Uint8Array(rawKey)] : null,
+    key:raw?[...new Uint8Array(raw)]:null,
     data:[...new Uint8Array(cipher)]
   };
 }
 
-/* GENERATE LINK */
+/* GENERATE */
 async function generate(){
 
   const msg=document.getElementById("msg").value;
   const pass=document.getElementById("pass").value;
 
-  const data = await encryptMessage(msg,pass);
-  const encoded = btoa(JSON.stringify(data));
+  const data=await encrypt(msg,pass);
+  const link=`${location.origin}${location.pathname}#SECMSG4.${btoa(JSON.stringify(data))}`;
 
-  const url = `${location.origin}${location.pathname}#SECMSG3.${encoded}`;
-
-  document.getElementById("link").textContent=url;
-  document.getElementById("outCard").classList.remove("hidden");
+  document.getElementById("link").textContent=link;
+  document.getElementById("linkCard").classList.remove("hidden");
 }
 
 /* COPY */
@@ -324,21 +352,17 @@ function copy(){
 /* SHARE */
 function share(){
   const url=document.getElementById("link").textContent;
-  navigator.share ? navigator.share({text:url}) : copy();
+  navigator.share?navigator.share({text:url}):copy();
 }
 
 /* LOAD */
 function load(){
   const h=location.hash;
-  if(!h.includes("SECMSG3.")) return;
+  if(!h.includes("SECMSG4.")) return;
 
-  try{
-    payload=JSON.parse(atob(h.split("SECMSG3.")[1]));
-    document.getElementById("status").textContent="Message loaded from secure link";
-    toggleMode();
-  }catch(e){
-    document.getElementById("status").textContent="Invalid or corrupted link";
-  }
+  payload=JSON.parse(atob(h.split("SECMSG4.")[1]));
+  document.getElementById("status").textContent="Secure link loaded";
+  setMode("receive");
 }
 
 /* DECRYPT */
@@ -353,7 +377,7 @@ async function decrypt(){
     let key;
 
     if(payload.salt.length){
-      key=await deriveKey(pass,new Uint8Array(payload.salt));
+      key=await derive(pass,new Uint8Array(payload.salt));
     }else{
       key=await crypto.subtle.importKey(
         "raw",
@@ -375,7 +399,7 @@ async function decrypt(){
     history.replaceState({}, "", location.pathname);
 
   }catch(e){
-    document.getElementById("out").textContent="❌ Failed to decrypt (wrong password or invalid link)";
+    document.getElementById("out").textContent="Decryption failed";
   }
 }
 
