@@ -9,25 +9,24 @@
 
 <style>
 :root{
-  --bg:#0a0d14;
-  --panel:#111827;
-  --panel2:#0f1624;
-  --text:#e8ecf7;
-  --muted:#93a4c7;
+  --bg:#0b0f1a;
+  --card:#121a2a;
+  --card2:#0f1626;
+  --text:#e9eefc;
+  --muted:#8ea0c7;
   --border:rgba(255,255,255,0.08);
   --accent:#6c8cff;
-  --accent2:#2ee6a6;
-  --shadow:0 20px 60px rgba(0,0,0,0.45);
+  --shadow:0 20px 60px rgba(0,0,0,0.4);
   --r:16px;
   --font:'Inter',sans-serif;
 }
 
 .light{
   --bg:#f5f7ff;
-  --panel:#ffffff;
-  --panel2:#f0f3ff;
+  --card:#ffffff;
+  --card2:#f0f3ff;
   --text:#0f172a;
-  --muted:#5a6478;
+  --muted:#5b6475;
   --border:rgba(0,0,0,0.08);
   --shadow:0 20px 60px rgba(0,0,0,0.08);
 }
@@ -38,140 +37,98 @@ body{
   font-family:var(--font);
   background:var(--bg);
   color:var(--text);
-  transition:.3s;
 }
 
-/* APP SHELL */
+/* LAYOUT */
 .app{
-  max-width:920px;
-  margin:0 auto;
+  max-width:900px;
+  margin:auto;
   padding:24px;
 }
 
-/* TOP BAR */
+/* TOP */
 .top{
   display:flex;
   justify-content:space-between;
   align-items:center;
-  margin-bottom:22px;
+  margin-bottom:18px;
 }
 
 .title{
   font-weight:700;
-  letter-spacing:-0.3px;
-}
-
-.actions{
-  display:flex;
-  gap:10px;
 }
 
 .btn{
   border:1px solid var(--border);
-  background:var(--panel);
+  background:var(--card);
   color:var(--text);
   padding:10px 14px;
   border-radius:999px;
-  font-size:13px;
   cursor:pointer;
-  transition:.2s;
 }
 
-.btn:hover{
-  transform:translateY(-1px);
-}
-
-.btn.primary{
-  background:linear-gradient(135deg,var(--accent),#8aa2ff);
-  border:none;
-  color:white;
-}
-
-/* MODE SWITCH */
+/* SWITCH */
 .switch{
   display:flex;
   gap:10px;
-  margin-bottom:18px;
+  margin-bottom:16px;
 }
 
 .switch button{
   flex:1;
 }
 
-/* GRID CARDS */
-.grid{
-  display:grid;
-  gap:14px;
+.primary{
+  background:var(--accent);
+  color:white;
+  border:none;
 }
 
 /* CARD */
 .card{
-  background:var(--panel);
+  background:var(--card);
   border:1px solid var(--border);
   border-radius:var(--r);
-  padding:16px;
-  box-shadow:var(--shadow);
+  padding:14px;
+  margin-bottom:12px;
 }
 
 label{
-  display:block;
   font-size:11px;
-  letter-spacing:1px;
-  text-transform:uppercase;
   color:var(--muted);
-  margin-bottom:8px;
+  text-transform:uppercase;
+  letter-spacing:1px;
 }
 
 textarea,input{
   width:100%;
+  margin-top:8px;
   padding:12px;
   border-radius:12px;
   border:1px solid var(--border);
-  background:var(--panel2);
+  background:var(--card2);
   color:var(--text);
-  font-family:var(--font);
   outline:none;
 }
 
-textarea{
-  min-height:110px;
-  resize:vertical;
-}
+textarea{min-height:110px;}
 
-/* LINK CARD (IMPORTANT FIX) */
-.linkbox{
-  background:var(--panel2);
-  border:1px solid var(--border);
-  padding:14px;
-  border-radius:14px;
+/* LINK */
+.link{
   font-size:12px;
   word-break:break-all;
-  line-height:1.4;
+  background:var(--card2);
+  padding:12px;
+  border-radius:12px;
 }
 
-/* BUTTON ROW */
-.row{
-  display:flex;
-  gap:10px;
-  margin-top:10px;
-}
-
-.row button{
-  flex:1;
-}
-
-/* RECEIVE */
+/* HIDE */
 .hidden{display:none}
 
+/* OUTPUT */
 .output{
   font-family:monospace;
   white-space:pre-wrap;
-}
-
-/* STATUS */
-.status{
-  font-size:12px;
-  color:var(--muted);
 }
 </style>
 </head>
@@ -182,9 +139,7 @@ textarea{
 
   <div class="top">
     <div class="title">🔐 Secure Messenger</div>
-    <div class="actions">
-      <button class="btn" onclick="toggleTheme()">Theme</button>
-    </div>
+    <button class="btn" onclick="toggleTheme()">Theme</button>
   </div>
 
   <div class="switch">
@@ -195,34 +150,24 @@ textarea{
   <!-- SEND -->
   <div id="send">
 
-    <div class="grid">
+    <div class="card">
+      <label>Message</label>
+      <textarea id="msg"></textarea>
+    </div>
 
-      <div class="card">
-        <label>Message</label>
-        <textarea id="msg"></textarea>
-      </div>
+    <div class="card">
+      <label>Password (optional)</label>
+      <input id="pass" type="password"/>
+    </div>
 
-      <div class="card">
-        <label>Password (optional)</label>
-        <input id="pass" type="password" placeholder="Adds encryption layer"/>
-      </div>
+    <div class="card">
+      <button class="btn primary" onclick="generate()">Generate Link</button>
+    </div>
 
-      <div class="card">
-        <button class="btn primary" onclick="generate()">Generate Secure Link</button>
-      </div>
-
-      <div class="card hidden" id="linkCard">
-        <label>Share Link</label>
-        <div class="linkbox" id="link"></div>
-
-        <div class="row">
-          <button class="btn" onclick="copy()">Copy</button>
-          <button class="btn" onclick="share()">Share</button>
-        </div>
-
-        <div class="status">Encrypted using AES-256-GCM + PBKDF2 (when password used)</div>
-      </div>
-
+    <div class="card hidden" id="linkCard">
+      <label>Share Link</label>
+      <div class="link" id="link"></div>
+      <button class="btn" onclick="copy()">Copy</button>
     </div>
 
   </div>
@@ -230,27 +175,18 @@ textarea{
   <!-- RECEIVE -->
   <div id="receive" class="hidden">
 
-    <div class="grid">
+    <div class="card">
+      <label>Password</label>
+      <input id="rpass" type="password"/>
+    </div>
 
-      <div class="card">
-        <label>Status</label>
-        <div class="status" id="status">Waiting for secure link...</div>
-      </div>
+    <div class="card">
+      <button class="btn primary" onclick="decrypt()">Decrypt</button>
+    </div>
 
-      <div class="card">
-        <label>Password</label>
-        <input id="rpass" type="password"/>
-      </div>
-
-      <div class="card">
-        <button class="btn primary" onclick="decrypt()">Decrypt</button>
-      </div>
-
-      <div class="card">
-        <label>Message</label>
-        <div class="output" id="out"></div>
-      </div>
-
+    <div class="card">
+      <label>Message</label>
+      <div class="output" id="out"></div>
     </div>
 
   </div>
@@ -265,7 +201,6 @@ let payload=null;
 /* MODE */
 function setMode(m){
   mode=m;
-
   document.getElementById("send").classList.toggle("hidden",m!=="send");
   document.getElementById("receive").classList.toggle("hidden",m!=="receive");
 
@@ -278,14 +213,23 @@ function toggleTheme(){
   document.body.classList.toggle("light");
 }
 
+/* ENCODING SAFE */
+function encodeBytes(arr){
+  return btoa(String.fromCharCode(...new Uint8Array(arr)));
+}
+
+function decodeBytes(str){
+  return Uint8Array.from(atob(str), c=>c.charCodeAt(0));
+}
+
 /* CRYPTO */
 const enc=new TextEncoder();
 const dec=new TextDecoder();
 
-async function derive(password,salt){
+async function derive(pass,salt){
   const keyMat=await crypto.subtle.importKey(
     "raw",
-    enc.encode(password),
+    enc.encode(pass),
     "PBKDF2",
     false,
     ["deriveKey"]
@@ -324,10 +268,10 @@ async function encrypt(msg,pass){
 
   return {
     v:4,
-    iv:[...iv],
-    salt:[...salt],
-    key:raw?[...new Uint8Array(raw)]:null,
-    data:[...new Uint8Array(cipher)]
+    iv:encodeBytes(iv),
+    salt:encodeBytes(salt),
+    key:raw?encodeBytes(raw):null,
+    data:encodeBytes(cipher)
   };
 }
 
@@ -338,7 +282,11 @@ async function generate(){
   const pass=document.getElementById("pass").value;
 
   const data=await encrypt(msg,pass);
-  const link=`${location.origin}${location.pathname}#SECMSG4.${btoa(JSON.stringify(data))}`;
+
+  const link=
+    location.origin+
+    location.pathname+
+    "#SECMSG4."+btoa(JSON.stringify(data));
 
   document.getElementById("link").textContent=link;
   document.getElementById("linkCard").classList.remove("hidden");
@@ -349,20 +297,18 @@ function copy(){
   navigator.clipboard.writeText(document.getElementById("link").textContent);
 }
 
-/* SHARE */
-function share(){
-  const url=document.getElementById("link").textContent;
-  navigator.share?navigator.share({text:url}):copy();
-}
-
 /* LOAD */
 function load(){
+
   const h=location.hash;
   if(!h.includes("SECMSG4.")) return;
 
-  payload=JSON.parse(atob(h.split("SECMSG4.")[1]));
-  document.getElementById("status").textContent="Secure link loaded";
-  setMode("receive");
+  try{
+    payload=JSON.parse(atob(h.split("SECMSG4.")[1]));
+    setMode("receive");
+  }catch(e){
+    console.log("Invalid link");
+  }
 }
 
 /* DECRYPT */
@@ -371,17 +317,19 @@ async function decrypt(){
   try{
     const pass=document.getElementById("rpass").value;
 
-    const iv=new Uint8Array(payload.iv);
-    const data=new Uint8Array(payload.data);
+    const iv=decodeBytes(payload.iv);
+    const data=decodeBytes(payload.data);
+
+    const salt=payload.salt?decodeBytes(payload.salt):null;
 
     let key;
 
-    if(payload.salt.length){
-      key=await derive(pass,new Uint8Array(payload.salt));
+    if(salt && salt.length){
+      key=await derive(pass,salt);
     }else{
       key=await crypto.subtle.importKey(
         "raw",
-        new Uint8Array(payload.key),
+        decodeBytes(payload.key),
         "AES-GCM",
         false,
         ["decrypt"]
@@ -395,11 +343,10 @@ async function decrypt(){
     );
 
     document.getElementById("out").textContent=dec.decode(out);
-
     history.replaceState({}, "", location.pathname);
 
   }catch(e){
-    document.getElementById("out").textContent="Decryption failed";
+    document.getElementById("out").textContent="❌ Failed to decrypt";
   }
 }
 
