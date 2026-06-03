@@ -3,183 +3,165 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Secure Link Messenger</title>
+<title>Secure Messenger v3</title>
 
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600;700&family=IBM+Plex+Mono&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
 :root{
-  --bg:#0e0f12;
-  --card:#151822;
-  --card2:#1b2030;
-  --text:#e9ecf5;
-  --muted:#8b93a7;
-  --accent:#4f7cff;
-  --border:#2a3144;
-  --good:#2dd4a0;
-  --danger:#ff5c7a;
-  --mono:'IBM Plex Mono', monospace;
-  --sans:'IBM Plex Sans', sans-serif;
-  --r:14px;
+  --bg:#0b0f1a;
+  --card:#121a2a;
+  --card2:#0f1626;
+  --text:#e9eefc;
+  --muted:#8ea0c7;
+  --accent:#6c8cff;
+  --accent2:#7cf0c5;
+  --border:rgba(255,255,255,0.08);
+  --shadow: 0 20px 60px rgba(0,0,0,0.4);
+  --r:16px;
+  --font:'Inter', sans-serif;
 }
 
 .light{
-  --bg:#f4f6fb;
+  --bg:#f4f7ff;
   --card:#ffffff;
-  --card2:#eef1f8;
-  --text:#111827;
-  --muted:#6b7280;
-  --accent:#2f5ce8;
-  --border:#d7dbea;
-  --good:#059669;
+  --card2:#f1f4ff;
+  --text:#0f172a;
+  --muted:#5b6475;
+  --border:rgba(0,0,0,0.08);
+  --shadow: 0 20px 60px rgba(0,0,0,0.08);
 }
 
 *{box-sizing:border-box;margin:0;padding:0}
 
 body{
+  font-family:var(--font);
   background:var(--bg);
   color:var(--text);
-  font-family:var(--sans);
   transition:.3s;
 }
 
-/* HEADER */
-.topbar{
+/* TOP BAR */
+.top{
   display:flex;
   justify-content:space-between;
+  padding:18px;
   align-items:center;
-  padding:14px 16px;
 }
 
-.title{
+.logo{
   font-weight:700;
+  letter-spacing:-0.3px;
 }
 
-/* TOGGLES */
-.controls{
+.switches{
   display:flex;
-  gap:8px;
+  gap:10px;
 }
 
 .btn{
-  border:1px solid var(--border);
+  border:none;
+  padding:10px 14px;
+  border-radius:999px;
+  cursor:pointer;
+  font-weight:600;
+  font-size:13px;
   background:var(--card);
   color:var(--text);
-  padding:8px 12px;
-  border-radius:999px;
-  font-size:12px;
-  cursor:pointer;
+  border:1px solid var(--border);
   transition:.2s;
 }
 
 .btn:hover{transform:translateY(-1px)}
 
-.btn.active{
-  background:var(--accent);
+.btn.primary{
+  background:linear-gradient(135deg,var(--accent),#8aa2ff);
   color:white;
   border:none;
 }
 
-/* WRAPPER */
+/* LAYOUT */
 .container{
-  max-width:900px;
-  margin:0 auto;
+  max-width:920px;
+  margin:auto;
   padding:10px;
 }
 
-/* PANELS */
 .card{
   background:var(--card);
   border:1px solid var(--border);
   border-radius:var(--r);
-  padding:14px;
-  margin-bottom:12px;
+  padding:16px;
+  margin-bottom:14px;
+  box-shadow:var(--shadow);
 }
 
 label{
   font-size:11px;
   color:var(--muted);
-  text-transform:uppercase;
   letter-spacing:1px;
+  text-transform:uppercase;
 }
 
-input, textarea{
+textarea,input{
   width:100%;
-  margin-top:6px;
-  padding:10px;
-  border-radius:10px;
+  margin-top:8px;
+  padding:12px;
+  border-radius:12px;
   border:1px solid var(--border);
   background:var(--card2);
   color:var(--text);
-  font-family:var(--mono);
+  font-family:var(--font);
 }
 
-textarea{min-height:90px;resize:vertical}
-
-.primary{
-  background:var(--accent);
-  color:white;
-  border:none;
-  padding:10px 14px;
-  border-radius:10px;
-  cursor:pointer;
-  font-weight:600;
-  width:100%;
-}
+textarea{min-height:110px;resize:vertical}
 
 /* LINK BOX */
-.linkbox{
-  word-break:break-all;
+.link{
   font-size:12px;
+  word-break:break-all;
   background:var(--card2);
-  padding:10px;
-  border-radius:10px;
+  padding:12px;
+  border-radius:12px;
   border:1px solid var(--border);
 }
 
-/* QR */
-#qr{
-  margin-top:10px;
+/* ROW */
+.row{
   display:flex;
-  justify-content:center;
+  gap:10px;
+  margin-top:10px;
 }
 
-/* RECEIVE STATE */
-.hidden{display:none}
+.small{
+  flex:1;
+}
 
 /* STATUS */
 .status{
   font-size:12px;
   color:var(--muted);
+  margin-top:6px;
 }
 
-/* SMALL BUTTON ROW */
-.row{
-  display:flex;
-  gap:8px;
-}
+/* RECEIVE */
+.hidden{display:none}
 
-.small{
-  flex:1;
-  font-size:12px;
-  padding:9px;
-}
-
-/* MESSAGE */
+/* OUTPUT */
 .output{
   white-space:pre-wrap;
-  font-family:var(--mono);
+  font-family:monospace;
 }
 </style>
 </head>
 
 <body>
 
-<div class="topbar">
-  <div class="title">🔐 Secure Link Messenger</div>
+<div class="top">
+  <div class="logo">🔐 Secure Messenger v3</div>
 
-  <div class="controls">
-    <button id="modeBtn" class="btn active" onclick="toggleMode()">Send</button>
+  <div class="switches">
+    <button class="btn" id="modeBtn" onclick="toggleMode()">Send</button>
     <button class="btn" onclick="toggleTheme()">Theme</button>
   </div>
 </div>
@@ -196,23 +178,21 @@ textarea{min-height:90px;resize:vertical}
 
   <div class="card">
     <label>Password (optional)</label>
-    <input id="pass" type="password" placeholder="Optional security layer"/>
+    <input id="pass" type="password" placeholder="Optional protection layer"/>
   </div>
 
-  <button class="primary" onclick="generateLink()">Generate Secure Link</button>
+  <button class="btn primary" onclick="generate()">Generate Secure Link</button>
 
-  <div class="card hidden" id="linkCard">
+  <div class="card hidden" id="outCard">
     <label>Share Link</label>
-    <div class="linkbox" id="link"></div>
+    <div class="link" id="link"></div>
 
     <div class="row">
-      <button class="btn small" onclick="copyLink()">Copy</button>
-      <button class="btn small" onclick="shareLink()">Share</button>
+      <button class="btn small" onclick="copy()">Copy</button>
+      <button class="btn small" onclick="share()">Share</button>
     </div>
 
-    <div id="qr"></div>
-
-    <p class="status">⚡ Anyone with this link can open the encrypted message.</p>
+    <div class="status">Only people with this link can decrypt the message.</div>
   </div>
 
 </div>
@@ -221,19 +201,19 @@ textarea{min-height:90px;resize:vertical}
 <div id="receive" class="hidden">
 
   <div class="card">
-    <label>Encrypted Link Detected</label>
-    <div class="status" id="status">Waiting for link...</div>
+    <label>Status</label>
+    <div class="status" id="status">Waiting for secure link...</div>
   </div>
 
   <div class="card">
-    <label>Password (if required)</label>
+    <label>Password</label>
     <input id="rpass" type="password"/>
   </div>
 
-  <button class="primary" onclick="decrypt()">Decrypt</button>
+  <button class="btn primary" onclick="decrypt()">Decrypt Message</button>
 
   <div class="card">
-    <label>Message</label>
+    <label>Output</label>
     <div class="output" id="out"></div>
   </div>
 
@@ -241,23 +221,18 @@ textarea{min-height:90px;resize:vertical}
 
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
-
 <script>
 
-/* STATE */
-let data = null;
-let mode = "send";
+/* MODE */
+let mode="send";
+let payload=null;
 
-/* TOGGLE MODE */
+/* TOGGLE */
 function toggleMode(){
-  mode = mode === "send" ? "receive" : "send";
-
-  document.getElementById("send").classList.toggle("hidden", mode !== "send");
-  document.getElementById("receive").classList.toggle("hidden", mode !== "receive");
-
-  document.getElementById("modeBtn").textContent =
-    mode === "send" ? "Send" : "Receive";
+  mode = mode==="send"?"receive":"send";
+  document.getElementById("send").classList.toggle("hidden",mode!=="send");
+  document.getElementById("receive").classList.toggle("hidden",mode!=="receive");
+  document.getElementById("modeBtn").textContent = mode==="send"?"Send":"Receive";
 }
 
 /* THEME */
@@ -265,99 +240,104 @@ function toggleTheme(){
   document.body.classList.toggle("light");
 }
 
-/* ENCRYPT */
-async function encryptMessage(msg, pass){
+/* HELPERS */
+const enc = new TextEncoder();
+const dec = new TextDecoder();
 
-  const enc = new TextEncoder();
-
-  const key = await crypto.subtle.generateKey(
-    {name:"AES-GCM", length:256},
-    true,
-    ["encrypt","decrypt"]
+/* KEY DERIVATION */
+async function deriveKey(password,salt){
+  const base = await crypto.subtle.importKey(
+    "raw",
+    enc.encode(password),
+    "PBKDF2",
+    false,
+    ["deriveKey"]
   );
 
+  return crypto.subtle.deriveKey(
+    {
+      name:"PBKDF2",
+      salt,
+      iterations:120000,
+      hash:"SHA-256"
+    },
+    base,
+    {name:"AES-GCM",length:256},
+    false,
+    ["encrypt","decrypt"]
+  );
+}
+
+/* ENCRYPT */
+async function encryptMessage(msg,password){
+
   const iv = crypto.getRandomValues(new Uint8Array(12));
+  const salt = crypto.getRandomValues(new Uint8Array(16));
 
-  let rawKey = await crypto.subtle.exportKey("raw", key);
-
-  if(pass){
-    const hash = await crypto.subtle.digest("SHA-256", enc.encode(pass));
-
-    const pwKey = await crypto.subtle.importKey(
-      "raw",
-      hash,
-      "AES-GCM",
-      false,
-      ["encrypt","decrypt"]
-    );
-
-    rawKey = await crypto.subtle.encrypt(
-      {name:"AES-GCM", iv},
-      pwKey,
-      rawKey
-    );
-  }
+  const key = password
+    ? await deriveKey(password,salt)
+    : await crypto.subtle.generateKey(
+        {name:"AES-GCM",length:256},
+        true,
+        ["encrypt","decrypt"]
+      );
 
   const cipher = await crypto.subtle.encrypt(
-    {name:"AES-GCM", iv},
+    {name:"AES-GCM",iv},
     key,
     enc.encode(msg)
   );
 
-  const payload = {
-    iv:[...iv],
-    key:[...new Uint8Array(rawKey)],
-    data:[...new Uint8Array(cipher)],
-    p: !!pass
-  };
+  const rawKey = password
+    ? null
+    : await crypto.subtle.exportKey("raw",key);
 
-  return btoa(JSON.stringify(payload));
+  return {
+    v:3,
+    iv:[...iv],
+    salt:[...salt],
+    key: rawKey ? [...new Uint8Array(rawKey)] : null,
+    data:[...new Uint8Array(cipher)]
+  };
 }
 
 /* GENERATE LINK */
-async function generateLink(){
+async function generate(){
 
-  const msg = document.getElementById("msg").value;
-  const pass = document.getElementById("pass").value;
+  const msg=document.getElementById("msg").value;
+  const pass=document.getElementById("pass").value;
 
-  const encoded = await encryptMessage(msg, pass);
+  const data = await encryptMessage(msg,pass);
+  const encoded = btoa(JSON.stringify(data));
 
-  const url = `${location.origin}${location.pathname}#${encoded}`;
+  const url = `${location.origin}${location.pathname}#SECMSG3.${encoded}`;
 
-  document.getElementById("link").textContent = url;
-  document.getElementById("linkCard").classList.remove("hidden");
-
-  QRCode.toCanvas(document.getElementById("qr"), url, {width:160});
+  document.getElementById("link").textContent=url;
+  document.getElementById("outCard").classList.remove("hidden");
 }
 
 /* COPY */
-function copyLink(){
+function copy(){
   navigator.clipboard.writeText(document.getElementById("link").textContent);
 }
 
 /* SHARE */
-function shareLink(){
-  const url = document.getElementById("link").textContent;
-
-  if(navigator.share){
-    navigator.share({text:url});
-  }else{
-    copyLink();
-  }
+function share(){
+  const url=document.getElementById("link").textContent;
+  navigator.share ? navigator.share({text:url}) : copy();
 }
 
-/* AUTO LOAD FROM URL */
-function loadFromURL(){
-  const hash = location.hash.slice(1);
-
-  if(!hash) return;
+/* LOAD */
+function load(){
+  const h=location.hash;
+  if(!h.includes("SECMSG3.")) return;
 
   try{
-    data = JSON.parse(atob(hash));
-    document.getElementById("status").textContent = "Message loaded from link";
-    toggleMode(); // auto switch to receive
+    payload=JSON.parse(atob(h.split("SECMSG3.")[1]));
+    document.getElementById("status").textContent="Message loaded from secure link";
+    toggleMode();
   }catch(e){
-    document.getElementById("status").textContent = "Invalid link";
+    document.getElementById("status").textContent="Invalid or corrupted link";
   }
 }
 
@@ -365,58 +345,41 @@ function loadFromURL(){
 async function decrypt(){
 
   try{
-    const pass = document.getElementById("rpass").value;
-    const enc = new TextEncoder();
+    const pass=document.getElementById("rpass").value;
 
-    let key = new Uint8Array(data.key);
-    const iv = new Uint8Array(data.iv);
+    const iv=new Uint8Array(payload.iv);
+    const data=new Uint8Array(payload.data);
 
-    if(data.p){
+    let key;
 
-      const hash = await crypto.subtle.digest("SHA-256", enc.encode(pass));
-
-      const pwKey = await crypto.subtle.importKey(
+    if(payload.salt.length){
+      key=await deriveKey(pass,new Uint8Array(payload.salt));
+    }else{
+      key=await crypto.subtle.importKey(
         "raw",
-        hash,
+        new Uint8Array(payload.key),
         "AES-GCM",
         false,
         ["decrypt"]
       );
-
-      key = new Uint8Array(await crypto.subtle.decrypt(
-        {name:"AES-GCM", iv},
-        pwKey,
-        key
-      ));
     }
 
-    const aes = await crypto.subtle.importKey(
-      "raw",
+    const out=await crypto.subtle.decrypt(
+      {name:"AES-GCM",iv},
       key,
-      "AES-GCM",
-      false,
-      ["decrypt"]
+      data
     );
 
-    const out = await crypto.subtle.decrypt(
-      {name:"AES-GCM", iv},
-      aes,
-      new Uint8Array(data.data)
-    );
+    document.getElementById("out").textContent=dec.decode(out);
 
-    const msg = new TextDecoder().decode(out);
-
-    document.getElementById("out").textContent = msg;
-
-    /* soft one-time behavior */
     history.replaceState({}, "", location.pathname);
 
   }catch(e){
-    document.getElementById("out").textContent = "Failed to decrypt";
+    document.getElementById("out").textContent="❌ Failed to decrypt (wrong password or invalid link)";
   }
 }
 
-loadFromURL();
+load();
 
 </script>
 
