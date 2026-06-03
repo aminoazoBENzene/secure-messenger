@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/>
+<meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Secure Messenger</title>
+<title>Secure Link Messenger</title>
 
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600;700&family=IBM+Plex+Mono&display=swap" rel="stylesheet">
 
@@ -11,24 +11,27 @@
 :root{
   --bg:#0e0f12;
   --card:#151822;
-  --card2:#1b1f2e;
-  --text:#e8ecf7;
-  --muted:#8a90a6;
+  --card2:#1b2030;
+  --text:#e9ecf5;
+  --muted:#8b93a7;
   --accent:#4f7cff;
-  --border:#2a2f40;
+  --border:#2a3144;
+  --good:#2dd4a0;
+  --danger:#ff5c7a;
   --mono:'IBM Plex Mono', monospace;
   --sans:'IBM Plex Sans', sans-serif;
   --r:14px;
 }
 
 .light{
-  --bg:#f3f5fa;
-  --card:#fff;
+  --bg:#f4f6fb;
+  --card:#ffffff;
   --card2:#eef1f8;
-  --text:#141722;
+  --text:#111827;
   --muted:#6b7280;
   --accent:#2f5ce8;
   --border:#d7dbea;
+  --good:#059669;
 }
 
 *{box-sizing:border-box;margin:0;padding:0}
@@ -37,8 +40,7 @@ body{
   background:var(--bg);
   color:var(--text);
   font-family:var(--sans);
-  padding:18px;
-  transition:.35s ease;
+  transition:.3s;
 }
 
 /* HEADER */
@@ -46,241 +48,240 @@ body{
   display:flex;
   justify-content:space-between;
   align-items:center;
-  margin-bottom:16px;
+  padding:14px 16px;
 }
 
 .title{
   font-weight:700;
 }
 
-/* TOGGLE BUTTON GROUP */
-.toggleGroup{
+/* TOGGLES */
+.controls{
   display:flex;
   gap:8px;
 }
 
-.pill{
+.btn{
   border:1px solid var(--border);
   background:var(--card);
   color:var(--text);
   padding:8px 12px;
   border-radius:999px;
-  cursor:pointer;
-  font-weight:600;
   font-size:12px;
-  transition:.25s;
+  cursor:pointer;
+  transition:.2s;
 }
 
-.pill:hover{
-  transform:translateY(-1px);
-}
+.btn:hover{transform:translateY(-1px)}
 
-/* ACTIVE STATES */
-.active{
+.btn.active{
   background:var(--accent);
   color:white;
-  border-color:transparent;
+  border:none;
 }
 
-/* MAIN WRAPPER (SMOOTH SWITCH) */
-.wrapper{
-  position:relative;
-  overflow:hidden;
-  border-radius:14px;
-}
-
-/* SLIDING PANES */
-.panels{
-  display:flex;
-  width:200%;
-  transition:transform .45s cubic-bezier(.4,.0,.2,1);
-}
-
-.panel{
-  width:50%;
+/* WRAPPER */
+.container{
+  max-width:900px;
+  margin:0 auto;
   padding:10px;
 }
 
-/* CARDS */
+/* PANELS */
 .card{
   background:var(--card);
   border:1px solid var(--border);
   border-radius:var(--r);
   padding:14px;
-  display:flex;
-  flex-direction:column;
-  gap:10px;
   margin-bottom:12px;
 }
 
-.card input, .card textarea{
-  width:100%;
-  background:var(--card2);
-  border:1px solid var(--border);
-  color:var(--text);
-  padding:10px;
-  border-radius:10px;
-  font-family:var(--mono);
-  font-size:12px;
+label{
+  font-size:11px;
+  color:var(--muted);
+  text-transform:uppercase;
+  letter-spacing:1px;
 }
 
-/* BUTTON */
-.btn{
+input, textarea{
+  width:100%;
+  margin-top:6px;
+  padding:10px;
+  border-radius:10px;
+  border:1px solid var(--border);
+  background:var(--card2);
+  color:var(--text);
+  font-family:var(--mono);
+}
+
+textarea{min-height:90px;resize:vertical}
+
+.primary{
   background:var(--accent);
   color:white;
   border:none;
-  padding:9px 12px;
+  padding:10px 14px;
   border-radius:10px;
   cursor:pointer;
   font-weight:600;
+  width:100%;
 }
 
-/* TOAST */
-.toast{
-  position:fixed;
-  bottom:16px;
-  left:50%;
-  transform:translateX(-50%);
-  background:rgba(0,0,0,0.75);
-  color:white;
-  padding:10px 14px;
-  border-radius:999px;
+/* LINK BOX */
+.linkbox{
+  word-break:break-all;
   font-size:12px;
-  opacity:0;
-  transition:.25s;
+  background:var(--card2);
+  padding:10px;
+  border-radius:10px;
+  border:1px solid var(--border);
 }
-.toast.show{opacity:1;transform:translateX(-50%) translateY(-6px)}
+
+/* QR */
+#qr{
+  margin-top:10px;
+  display:flex;
+  justify-content:center;
+}
+
+/* RECEIVE STATE */
+.hidden{display:none}
+
+/* STATUS */
+.status{
+  font-size:12px;
+  color:var(--muted);
+}
+
+/* SMALL BUTTON ROW */
+.row{
+  display:flex;
+  gap:8px;
+}
+
+.small{
+  flex:1;
+  font-size:12px;
+  padding:9px;
+}
+
+/* MESSAGE */
+.output{
+  white-space:pre-wrap;
+  font-family:var(--mono);
+}
 </style>
 </head>
 
 <body>
 
 <div class="topbar">
-  <div class="title">🔐 Secure Messenger</div>
+  <div class="title">🔐 Secure Link Messenger</div>
 
-  <div class="toggleGroup">
-    <button id="modeBtn" class="pill active" onclick="toggleMode()">Send</button>
-    <button class="pill" onclick="document.body.classList.toggle('light')">Theme</button>
+  <div class="controls">
+    <button id="modeBtn" class="btn active" onclick="toggleMode()">Send</button>
+    <button class="btn" onclick="toggleTheme()">Theme</button>
   </div>
 </div>
 
-<div class="wrapper">
-<div class="panels" id="slider">
+<div class="container">
 
 <!-- SEND -->
-<div class="panel">
+<div id="send">
 
   <div class="card">
-    <div>1. Identity</div>
-    <button class="btn" onclick="genKeys()">Generate Identity</button>
-  </div>
-
-  <div class="card">
-    <div>2. Optional Password</div>
-    <input id="pass" placeholder="Password (optional)"/>
-  </div>
-
-  <div class="card">
-    <div>3. Message</div>
+    <label>Message</label>
     <textarea id="msg"></textarea>
   </div>
 
   <div class="card">
-    <button class="btn" onclick="createPackage()">Export Secure File</button>
+    <label>Password (optional)</label>
+    <input id="pass" type="password" placeholder="Optional security layer"/>
+  </div>
+
+  <button class="primary" onclick="generateLink()">Generate Secure Link</button>
+
+  <div class="card hidden" id="linkCard">
+    <label>Share Link</label>
+    <div class="linkbox" id="link"></div>
+
+    <div class="row">
+      <button class="btn small" onclick="copyLink()">Copy</button>
+      <button class="btn small" onclick="shareLink()">Share</button>
+    </div>
+
+    <div id="qr"></div>
+
+    <p class="status">⚡ Anyone with this link can open the encrypted message.</p>
   </div>
 
 </div>
 
 <!-- RECEIVE -->
-<div class="panel">
+<div id="receive" class="hidden">
 
   <div class="card">
-    <div>Upload Message File</div>
-    <input type="file" onchange="loadFile(event)"/>
+    <label>Encrypted Link Detected</label>
+    <div class="status" id="status">Waiting for link...</div>
   </div>
 
   <div class="card">
-    <div>Password (if required)</div>
-    <input id="recvPass" type="password"/>
+    <label>Password (if required)</label>
+    <input id="rpass" type="password"/>
   </div>
 
-  <div class="card">
-    <button class="btn" onclick="decrypt()">Decrypt</button>
-  </div>
+  <button class="primary" onclick="decrypt()">Decrypt</button>
 
   <div class="card">
-    <div>Output</div>
-    <div id="out"></div>
+    <label>Message</label>
+    <div class="output" id="out"></div>
   </div>
 
 </div>
 
 </div>
-</div>
 
-<div class="toast" id="toast"></div>
+<script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
 
 <script>
 
-let mode = 0; // 0 send, 1 receive
-let priv = null;
-let packageData = null;
+/* STATE */
+let data = null;
+let mode = "send";
 
-/* MODE TOGGLE (SMOOTH SLIDE) */
+/* TOGGLE MODE */
 function toggleMode(){
-  mode = 1 - mode;
+  mode = mode === "send" ? "receive" : "send";
 
-  document.getElementById('slider').style.transform =
-    mode ? 'translateX(-50%)' : 'translateX(0%)';
+  document.getElementById("send").classList.toggle("hidden", mode !== "send");
+  document.getElementById("receive").classList.toggle("hidden", mode !== "receive");
 
-  const btn = document.getElementById('modeBtn');
-  btn.textContent = mode ? "Receive" : "Send";
-
-  btn.classList.toggle('active');
+  document.getElementById("modeBtn").textContent =
+    mode === "send" ? "Send" : "Receive";
 }
 
-/* KEY GEN */
-async function genKeys(){
-  const pair = await crypto.subtle.generateKey({
-    name:"RSA-OAEP",
-    modulusLength:2048,
-    publicExponent:new Uint8Array([1,0,1]),
-    hash:"SHA-256"
-  }, true, ["encrypt","decrypt"]);
-
-  priv = pair.privateKey;
-  toast("Identity ready");
+/* THEME */
+function toggleTheme(){
+  document.body.classList.toggle("light");
 }
 
-/* PACKAGE */
-async function createPackage(){
+/* ENCRYPT */
+async function encryptMessage(msg, pass){
 
-  const msg = document.getElementById('msg').value;
+  const enc = new TextEncoder();
 
-  const aes = await crypto.subtle.generateKey(
-    {name:"AES-GCM",length:256},
+  const key = await crypto.subtle.generateKey(
+    {name:"AES-GCM", length:256},
     true,
     ["encrypt","decrypt"]
   );
 
   const iv = crypto.getRandomValues(new Uint8Array(12));
 
-  const enc = await crypto.subtle.encrypt(
-    {name:"AES-GCM",iv},
-    aes,
-    new TextEncoder().encode(msg)
-  );
-
-  const raw = await crypto.subtle.exportKey("raw", aes);
-
-  const pass = document.getElementById('pass').value;
-  let key = raw;
+  let rawKey = await crypto.subtle.exportKey("raw", key);
 
   if(pass){
-    const hash = await crypto.subtle.digest(
-      "SHA-256",
-      new TextEncoder().encode(pass)
-    );
+    const hash = await crypto.subtle.digest("SHA-256", enc.encode(pass));
 
     const pwKey = await crypto.subtle.importKey(
       "raw",
@@ -290,47 +291,89 @@ async function createPackage(){
       ["encrypt","decrypt"]
     );
 
-    key = await crypto.subtle.encrypt(
-      {name:"AES-GCM",iv},
+    rawKey = await crypto.subtle.encrypt(
+      {name:"AES-GCM", iv},
       pwKey,
-      raw
+      rawKey
     );
   }
 
-  packageData = {
-    iv:Array.from(iv),
-    key:Array.from(new Uint8Array(key)),
-    data:Array.from(new Uint8Array(enc)),
-    protected:!!pass
+  const cipher = await crypto.subtle.encrypt(
+    {name:"AES-GCM", iv},
+    key,
+    enc.encode(msg)
+  );
+
+  const payload = {
+    iv:[...iv],
+    key:[...new Uint8Array(rawKey)],
+    data:[...new Uint8Array(cipher)],
+    p: !!pass
   };
 
-  const blob = new Blob([JSON.stringify(packageData)]);
-  const a=document.createElement("a");
-  a.href=URL.createObjectURL(blob);
-  a.download="secure-message.json";
-  a.click();
-
-  toast("File exported");
+  return btoa(JSON.stringify(payload));
 }
 
-/* LOAD */
-async function loadFile(e){
-  packageData = JSON.parse(await e.target.files[0].text());
+/* GENERATE LINK */
+async function generateLink(){
+
+  const msg = document.getElementById("msg").value;
+  const pass = document.getElementById("pass").value;
+
+  const encoded = await encryptMessage(msg, pass);
+
+  const url = `${location.origin}${location.pathname}#${encoded}`;
+
+  document.getElementById("link").textContent = url;
+  document.getElementById("linkCard").classList.remove("hidden");
+
+  QRCode.toCanvas(document.getElementById("qr"), url, {width:160});
+}
+
+/* COPY */
+function copyLink(){
+  navigator.clipboard.writeText(document.getElementById("link").textContent);
+}
+
+/* SHARE */
+function shareLink(){
+  const url = document.getElementById("link").textContent;
+
+  if(navigator.share){
+    navigator.share({text:url});
+  }else{
+    copyLink();
+  }
+}
+
+/* AUTO LOAD FROM URL */
+function loadFromURL(){
+  const hash = location.hash.slice(1);
+
+  if(!hash) return;
+
+  try{
+    data = JSON.parse(atob(hash));
+    document.getElementById("status").textContent = "Message loaded from link";
+    toggleMode(); // auto switch to receive
+  }catch(e){
+    document.getElementById("status").textContent = "Invalid link";
+  }
 }
 
 /* DECRYPT */
 async function decrypt(){
+
   try{
-    const iv = new Uint8Array(packageData.iv);
-    let key = new Uint8Array(packageData.key);
+    const pass = document.getElementById("rpass").value;
+    const enc = new TextEncoder();
 
-    if(packageData.protected){
-      const pass = document.getElementById('recvPass').value;
+    let key = new Uint8Array(data.key);
+    const iv = new Uint8Array(data.iv);
 
-      const hash = await crypto.subtle.digest(
-        "SHA-256",
-        new TextEncoder().encode(pass)
-      );
+    if(data.p){
+
+      const hash = await crypto.subtle.digest("SHA-256", enc.encode(pass));
 
       const pwKey = await crypto.subtle.importKey(
         "raw",
@@ -341,7 +384,7 @@ async function decrypt(){
       );
 
       key = new Uint8Array(await crypto.subtle.decrypt(
-        {name:"AES-GCM",iv},
+        {name:"AES-GCM", iv},
         pwKey,
         key
       ));
@@ -356,29 +399,24 @@ async function decrypt(){
     );
 
     const out = await crypto.subtle.decrypt(
-      {name:"AES-GCM",iv},
+      {name:"AES-GCM", iv},
       aes,
-      new Uint8Array(packageData.data)
+      new Uint8Array(data.data)
     );
 
-    document.getElementById('out').textContent =
-      new TextDecoder().decode(out);
+    const msg = new TextDecoder().decode(out);
 
-    toast("Decrypted");
+    document.getElementById("out").textContent = msg;
+
+    /* soft one-time behavior */
+    history.replaceState({}, "", location.pathname);
 
   }catch(e){
-    document.getElementById('out').textContent =
-      "Failed to decrypt";
+    document.getElementById("out").textContent = "Failed to decrypt";
   }
 }
 
-/* TOAST */
-function toast(m){
-  const t=document.getElementById('toast');
-  t.textContent=m;
-  t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),1500);
-}
+loadFromURL();
 
 </script>
 
